@@ -1,12 +1,12 @@
 @echo off
 REM ==========================================================
 REM  YEHOSHU'A MUSIQ - MASTER : compilation Windows en 1 clic
-REM  Prérequis : Visual Studio 2022 (charge "Développement C++"),
+REM  Prérequis : Visual Studio 2022 ou plus récent (charge "Développement C++"),
 REM              CMake et Git (installés avec Visual Studio ou à part)
 REM ==========================================================
 cd /d "%~dp0"
 echo [1/3] Configuration (telecharge JUCE automatiquement la 1re fois)...
-cmake -B build -G "Visual Studio 17 2022" -A x64 || goto :err
+cmake -B build -A x64 || goto :err
 echo [2/3] Compilation Release...
 cmake --build build --config Release --target YehoshuaMaster_VST3 YehoshuaMaster_Standalone --parallel || goto :err
 echo [3/3] Copie du plugin...

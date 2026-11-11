@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configurer (CMake + Visual Studio)
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+        run: cmake -B build -A x64
 
       - name: Compiler (Release)
         run: cmake --build build --config Release --target YehoshuaMaster_VST3 YehoshuaMaster_Standalone --parallel
