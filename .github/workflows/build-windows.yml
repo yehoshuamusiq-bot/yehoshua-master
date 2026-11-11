@@ -1,0 +1,33 @@
+# Compile automatiquement le plugin VST3 pour Windows (FL Studio) sur GitHub.
+# Onglet "Actions" > dernier build > section "Artifacts" > télécharger YEHOSHUA-MASTER-Windows.
+name: Build Windows VST3
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurer (CMake + Visual Studio)
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Compiler (Release)
+        run: cmake --build build --config Release --target YehoshuaMaster_VST3 YehoshuaMaster_Standalone --parallel
+
+      - name: Préparer le paquet
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path package | Out-Null
+          Copy-Item -Recurse "build/YehoshuaMaster_artefacts/Release/VST3/YEHOSHUA MASTER.vst3" package/
+          Copy-Item "build/YehoshuaMaster_artefacts/Release/Standalone/YEHOSHUA MASTER.exe" package/
+          if (Test-Path "Guide_YEHOSHUA_MASTER.pdf") { Copy-Item "Guide_YEHOSHUA_MASTER.pdf" package/ }
+
+      - name: Publier l'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: YEHOSHUA-MASTER-Windows
+          path: package
